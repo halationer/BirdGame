@@ -9,6 +9,7 @@ public class BirdPlayer : MonoBehaviour
     Rigidbody2D rigid;
     Animator animator;
     Vector3 originalPosition;
+    bool flyLock = false;
 
     private void Start()
     {
@@ -21,14 +22,22 @@ public class BirdPlayer : MonoBehaviour
         GameManager.Instance.OnGameStart += OnGameStart;
         GameManager.Instance.OnGameEnd += OnGameEnd;
         GameManager.Instance.OnGameRestart += OnGameRestart;
+        GameManager.Instance.OnGameSimulateEnd += OnGameSimulatedEnd;
     }
 
     void OnGameStart()
     {
         rigid.simulated = true;
+        flyLock = false;
+        FlyUpOnce();
     }
 
     void OnGameEnd()
+    {
+        flyLock = true;
+    }
+
+    void OnGameSimulatedEnd()
     {
         rigid.simulated = false;
         animator.enabled = false;
@@ -36,6 +45,8 @@ public class BirdPlayer : MonoBehaviour
 
     void OnGameRestart()
     {
+        flyLock = false;
+        rigid.simulated = false;
         animator.enabled = true;
         animator.SetTrigger("Reset");
         transform.position = originalPosition;
@@ -43,7 +54,7 @@ public class BirdPlayer : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.state == GameState.End) return;
+        if (GameManager.Instance.state != GameState.Playing) return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -53,6 +64,8 @@ public class BirdPlayer : MonoBehaviour
 
     void FlyUpOnce()
     {
+        if (flyLock) return;
+
         if(rigid != null)
         {
             rigid.velocity = Vector3.zero;
@@ -71,8 +84,19 @@ public class BirdPlayer : MonoBehaviour
         switch(collision.gameObject.tag)
         {
             case "ground":
+                CollisionDie();
+                GameManager.Instance.SimulateEnd();
+                break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        switch (collision.gameObject.tag)
+        {
             case "pipe":
-                CollisionDie(); break;                
+                CollisionDie();
+                break;
         }
     }
 }

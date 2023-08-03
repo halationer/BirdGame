@@ -7,7 +7,8 @@ public enum GameState
 {
     Ready,
     Playing,
-    End
+    End,
+    SimulateEnd
 }
 
 public class GameManager : MonoBehaviour
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
 
     public event Action OnGameStart;
     public event Action OnGameEnd;
+    public event Action OnGameSimulateEnd;
     public event Action OnGameRestart;
 
     // Start is called before the first frame update
@@ -47,9 +49,17 @@ public class GameManager : MonoBehaviour
         OnGameEnd?.Invoke();
     }
 
-    public void RestartGame()
+    public void SimulateEnd()
     {
         if (state != GameState.End) return;
+
+        state = GameState.SimulateEnd;
+        OnGameSimulateEnd?.Invoke();
+    }
+
+    public void RestartGame()
+    {
+        if (state != GameState.End && state != GameState.SimulateEnd) return;
 
         state = GameState.Ready;
         OnGameRestart?.Invoke();

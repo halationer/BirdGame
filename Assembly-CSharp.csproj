@@ -64,7 +64,7 @@
     <Compile Include="Assets\Scripts\LoopMove.cs" />
     <Compile Include="Assets\Test\Scripts\Jumping.cs" />
     <Compile Include="Assets\Scripts\ScoreManager.cs" />
-    <Compile Include="Assets\Scripts\BirdAttack.cs" />
+    <Compile Include="Assets\Scripts\RotateBySpeed.cs" />
     <Compile Include="Assets\Scripts\BirdPlayer.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Test\Scripts\GameStateDebuger.cs" />
