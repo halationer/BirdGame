@@ -27,8 +27,13 @@ public class ScoreManager : MonoBehaviour
     {
         if(other.gameObject.tag == "player")
         {
-            Score++;
-            BestScore = Mathf.Max(BestScore, Score);
+            AddScore();
         }
+    }
+
+    public void AddScore()
+    {
+        Score++;
+        BestScore = Mathf.Max(BestScore, Score);
     }
 }

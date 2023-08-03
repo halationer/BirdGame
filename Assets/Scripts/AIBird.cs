@@ -4,18 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BirdAttack : MonoBehaviour
+public class AIBird : MonoBehaviour, IFactoryObject
 {
-    public float moveSpeed = 5.0f;
+    public float moveSpeed = -5.0f;
     public float attackSpeed = 1.0f;
     public Transform bulletStart;
-    public float bulletSpeed = 10.0f;
+    public float bulletSpeed = -10.0f;
 
     Rigidbody2D rigid;
     Animator animator;
     Vector3 originalPosition;
     bool attackLock = true;
     bool moveLock = true;
+
+    [HideInInspector]
+    public BirdFactory factory;
 
     private void Start()
     {
@@ -31,21 +34,35 @@ public class BirdAttack : MonoBehaviour
         GameManager.Instance.OnGameRestart += OnGameRestart;
     }
 
+    private void OnEnable()
+    {
+        OnGameStart();
+    }
+
+    private void OnDisable()
+    {
+        OnGameEnd();
+    }
+
     void OnGameStart()
     {
+        if(animator != null) 
+        { 
+            animator.enabled = true; 
+        }
         attackLock = false;
         moveLock = false;
     }
 
     void OnGameEnd()
     {
-        animator.enabled = false;
+        if (animator != null)
+        {
+            animator.enabled = false;
+        }
         attackLock = true;
-        moveLock = true; 
+        moveLock = true;
         CancelInvoke();
-        rigid.gravityScale = 1.0f;
-        rigid.velocity = Vector3.zero;
-        rigid.AddForce(Vector2.down * 5.0f, ForceMode2D.Impulse);
     }
 
     void OnGameRestart()
@@ -54,48 +71,32 @@ public class BirdAttack : MonoBehaviour
         animator.SetTrigger("Reset");
         attackLock = true;
         moveLock = true;
-        transform.position = originalPosition; 
-        rigid.gravityScale = 0f;
+        transform.position = originalPosition;
     }
 
     private void Update()
     {
         if (GameManager.Instance.state == GameState.End) return;
 
-        AxisMove();
+        VectorMove(Vector3.right);
         Attack();
     }
 
-    void AxisMove()
+    void VectorMove(Vector3 moveDistance)
     {
         if (moveLock) return;
-
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        Vector3 moveDistance = new Vector3(horizontal, vertical, 0);
-        if (moveDistance.magnitude < 0.1f) return;
 
         animator.SetTrigger("Fly");
         moveDistance.Normalize();
         moveDistance *= moveSpeed;
         moveDistance *= Time.deltaTime;
-        Vector3 preMovePositon = transform.position + moveDistance;
-
-        if (Screen.safeArea.Contains(Camera.main.WorldToScreenPoint(preMovePositon)))
-        {
-            transform.position = preMovePositon;
-        }
+        transform.position = transform.position + moveDistance;
     }
 
     void Attack()
     {
         if (attackLock) return;
-
-        if (Input.GetAxisRaw("Fire1") == 1.0f)
-        {
-            FireOnce();
-        }
+        FireOnce();
     }
 
     void FireOnce()
@@ -106,7 +107,7 @@ public class BirdAttack : MonoBehaviour
         GameObject bullet = BulletPool.Instance.ActiveBullet(bulletStart);
         bullet.GetComponent<LoopMove>().moveSpeed = bulletSpeed;
         bullet.tag = tag + "_bullet";
-        bullet.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
+        bullet.GetComponentInChildren<SpriteRenderer>().color = Color.red;
         float sleepTime = 1.0f / attackSpeed;
         Invoke("ResetFire", sleepTime);
     }
@@ -116,19 +117,9 @@ public class BirdAttack : MonoBehaviour
         attackLock = false;
     }
 
-    public void CollisionDie()
-    {
-        GameManager.Instance.EndGame();
-    }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void DestroySelf()
     {
-        switch (collision.gameObject.tag)
-        {
-            case "ground":
-            case "pipe":
-            case "enemy":
-                CollisionDie(); break;
-        }
+        factory?.DestroyBird(gameObject);
     }
 }

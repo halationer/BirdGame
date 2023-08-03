@@ -8,6 +8,9 @@ TagManager:
   - pipe
   - player
   - score
+  - enemy
+  - player_bullet
+  - enemy_bullet
   layers:
   - Default
   - TransparentFX
