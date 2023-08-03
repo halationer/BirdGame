@@ -14,7 +14,7 @@ public class PipeFactory : MonoBehaviour
 
     float ExistTime { get => existDistance / moveSpeed; }
     float GenerateTime { get => gapX / moveSpeed;  }
-    List<Coroutine> coroutineList = new List<Coroutine>();
+    //List<Coroutine> coroutineList = new List<Coroutine>();
     List<GameObject> allPipeList = new List<GameObject>(); 
     Queue<GameObject> deactivePipe = new Queue<GameObject>();
 
@@ -29,14 +29,16 @@ public class PipeFactory : MonoBehaviour
 
     void OnGameStart()
     {
-        coroutineList.Add(StartCoroutine(GeneratePipeLoop()));
+        StartCoroutine(GeneratePipeLoop());
+        //coroutineList.Add(StartCoroutine(GeneratePipeLoop()));
     }
 
     void OnGameEnd()
     {
-        foreach (Coroutine coroutine in coroutineList)
-            StopCoroutine(coroutine);
-        coroutineList.Clear();
+        //foreach (Coroutine coroutine in coroutineList)
+        //    StopCoroutine(coroutine);
+        //coroutineList.Clear();
+        StopAllCoroutines();
     }
 
     void OnGameRestart()
@@ -101,7 +103,8 @@ public class PipeFactory : MonoBehaviour
     {
         while(true)
         {
-            coroutineList.Add(StartCoroutine(GeneratePipe()));
+            StartCoroutine(GeneratePipe());
+            //coroutineList.Add(StartCoroutine(GeneratePipe()));
             yield return new WaitForSeconds(GenerateTime);
         }
     }

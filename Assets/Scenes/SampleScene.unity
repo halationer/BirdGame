@@ -1955,6 +1955,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1962926136}
     m_Modifications:
+    - target: {fileID: 2219989513767946558, guid: b98fd25b100a50a42bef104fc2baf921, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3843579837285396218, guid: b98fd25b100a50a42bef104fc2baf921, type: 3}
       propertyPath: m_Name
       value: Bird
