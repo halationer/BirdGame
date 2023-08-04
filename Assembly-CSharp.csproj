@@ -59,23 +59,29 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\UI\ScoreUI.cs" />
+    <Compile Include="Assets\Scripts\UI\HPBar.cs" />
+    <Compile Include="Assets\Test\Scripts\CollisionDebugger.cs" />
     <Compile Include="Assets\Scripts\UI\StartUI.cs" />
-    <Compile Include="Assets\Scripts\BirdFactory.cs" />
-    <Compile Include="Assets\Scripts\BulletPool.cs" />
-    <Compile Include="Assets\Scripts\PipeFactory.cs" />
+    <Compile Include="Assets\Scripts\Player\AIBird.cs" />
+    <Compile Include="Assets\Scripts\Manager\ScoreManager.cs" />
+    <Compile Include="Assets\Scripts\Player\Player.cs" />
+    <Compile Include="Assets\Scripts\Manager\BulletPool.cs" />
     <Compile Include="Assets\Scripts\LoopMove.cs" />
     <Compile Include="Assets\Test\Scripts\Jumping.cs" />
-    <Compile Include="Assets\Scripts\ScoreManager.cs" />
-    <Compile Include="Assets\Scripts\BirdAttack.cs" />
-    <Compile Include="Assets\Scripts\BirdPlayer.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\PipeFactory.cs" />
+    <Compile Include="Assets\Scripts\Manager\BirdFactory.cs" />
     <Compile Include="Assets\Test\Scripts\GameStateDebuger.cs" />
     <Compile Include="Assets\Scripts\ScoreTrigger.cs" />
+    <Compile Include="Assets\Scripts\UI\PlayingUI.cs" />
+    <Compile Include="Assets\Scripts\Interface\IFactoryObject.cs" />
+    <Compile Include="Assets\Scripts\Interface\ILifeObject.cs" />
     <Compile Include="Assets\Scripts\BulletTrigger.cs" />
     <Compile Include="Assets\Scripts\BulletDestroy.cs" />
     <Compile Include="Assets\Scripts\UI\EndUI.cs" />
-    <Compile Include="Assets\Scripts\AIBird.cs" />
-    <Compile Include="Assets\Scripts\IFactoryObject.cs" />
+    <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Player\BirdPlayer.cs" />
+    <Compile Include="Assets\Scripts\Player\BirdAttack.cs" />
+    <Compile Include="Assets\Scripts\Interface\IDamageMaker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

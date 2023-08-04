@@ -1,23 +1,25 @@
-using AOT;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BirdAttack : MonoBehaviour
+public class Player : MonoBehaviour, ILifeObject
 {
+    public int maxHp = 10;
+    protected int hp = 0;
+
     public float moveSpeed = 5.0f;
     public float attackSpeed = 1.0f;
     public Transform bulletStart;
     public float bulletSpeed = 10.0f;
+    public GameObject bulletType;
 
-    Rigidbody2D rigid;
-    Animator animator;
-    Vector3 originalPosition;
-    bool attackLock = true;
-    bool moveLock = true;
+    protected Rigidbody2D rigid;
+    protected Animator animator;
+    protected Vector3 originalPosition;
+    protected bool attackLock = true;
+    protected bool moveLock = true;
 
-    private void Start()
+    protected virtual void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
         if (rigid != null) rigid.gravityScale = 0f;
@@ -31,42 +33,43 @@ public class BirdAttack : MonoBehaviour
         GameManager.Instance.OnGameRestart += OnGameRestart;
     }
 
-    void OnGameStart()
+    protected virtual void OnGameStart()
     {
+        hp = maxHp;
         attackLock = false;
         moveLock = false;
     }
 
-    void OnGameEnd()
+    protected virtual void OnGameEnd()
     {
-        animator.enabled = false;
+        if(animator != null)
+        {
+            animator.enabled = false;
+        }
         attackLock = true;
-        moveLock = true; 
+        moveLock = true;
         CancelInvoke();
-        rigid.gravityScale = 1.0f;
-        rigid.velocity = Vector3.zero;
-        rigid.AddForce(Vector2.down * 5.0f, ForceMode2D.Impulse);
     }
 
-    void OnGameRestart()
+    protected virtual void OnGameRestart()
     {
         animator.enabled = true;
         animator.SetTrigger("Reset");
         attackLock = true;
         moveLock = true;
-        transform.position = originalPosition; 
+        transform.position = originalPosition;
         rigid.gravityScale = 0f;
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (GameManager.Instance.state == GameState.End) return;
 
-        AxisMove();
+        Move();
         Attack();
     }
 
-    void AxisMove()
+    protected virtual void Move()
     {
         if (moveLock) return;
 
@@ -88,7 +91,7 @@ public class BirdAttack : MonoBehaviour
         }
     }
 
-    void Attack()
+    protected virtual void Attack()
     {
         if (attackLock) return;
 
@@ -98,15 +101,12 @@ public class BirdAttack : MonoBehaviour
         }
     }
 
-    void FireOnce()
+    protected virtual void FireOnce()
     {
         if (BulletPool.Instance == null) return;
 
         attackLock = true;
-        GameObject bullet = BulletPool.Instance.ActiveBullet(bulletStart);
-        bullet.GetComponent<LoopMove>().moveSpeed = bulletSpeed;
-        bullet.tag = tag + "_bullet";
-        bullet.GetComponentInChildren<SpriteRenderer>().color = Color.yellow;
+        GameObject bullet = BulletPool.Instance.ActiveBullet(bulletStart, bulletType);
         float sleepTime = 1.0f / attackSpeed;
         Invoke("ResetFire", sleepTime);
     }
@@ -116,19 +116,24 @@ public class BirdAttack : MonoBehaviour
         attackLock = false;
     }
 
-    public void CollisionDie()
+    public int GetHP()
     {
-        GameManager.Instance.EndGame();
+        return hp;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public int GetMaxHP()
     {
-        switch (collision.gameObject.tag)
-        {
-            case "ground":
-            case "pipe":
-            case "enemy":
-                CollisionDie(); break;
-        }
+        return maxHp;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        hp -= damage;
+        if (hp < 0) hp = 0;
+    }
+
+    public bool isDie()
+    {
+        return hp == 0;
     }
 }

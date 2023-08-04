@@ -113,6 +113,8 @@ public class BirdFactory : MonoBehaviour
 
     IEnumerator GenerateBirdLoop()
     {
+        yield return new WaitForSeconds(2.0f);
+
         while (true)
         {
             GenerateBird();

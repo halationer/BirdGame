@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IFactoryObject
+public interface IDamageMaker
 {
-    void DestroySelf();
+    int GetDamage();
 }

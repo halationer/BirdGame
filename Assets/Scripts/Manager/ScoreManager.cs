@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,14 @@ public class ScoreManager : MonoBehaviour
         Instance = this;
     }
 
-    public int Score { get; private set; } = 0;
+    public Action<int> OnScoreChange;
+
+    private int score = 0;
+    public int Score
+    {
+        get { return score; }
+        set { score = value; OnScoreChange(score); }
+    }
     public int BestScore { get; private set; } = 0;
 
     private void Start()

@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 8116175214719380845}
   - component: {fileID: 2809260390526294667}
   - component: {fileID: 3875672886289226635}
-  - component: {fileID: 8300120973753721524}
   - component: {fileID: 583733406702938412}
   m_Layer: 0
   m_Name: Player
@@ -183,19 +182,6 @@ CircleCollider2D:
   m_Offset: {x: 0.3, y: -0.21}
   serializedVersion: 2
   m_Radius: 1.64
---- !u!114 &8300120973753721524
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8371659087134552419}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 995582f1c340e114aa3a2c9cc1db5538, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  flyStrength: 4
 --- !u!114 &583733406702938412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,10 +194,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc0f06762328e9348a3c86d1e097ca92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 5
   moveSpeed: 5
   attackSpeed: 10
   bulletStart: {fileID: 1962076201739783687}
   bulletSpeed: 10
+  bulletType: {fileID: 8390824336573811321, guid: 7e0051a89f852a0468a568c9710bb435, type: 3}
 --- !u!1001 &7701718216457421047
 PrefabInstance:
   m_ObjectHideFlags: 0
