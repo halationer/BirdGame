@@ -42,7 +42,9 @@ public class BirdAttack : Player
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        switch (collision.gameObject.tag) 
+        // 注意，collision.gameObject 永远获取到的都是直接挂载到场景的大的 object
+        // 而 collision.collider 可以获取到准确的碰撞对象
+        switch (collision.collider.tag) 
         {
             case "enemy":
                 Die(); break;

@@ -34,6 +34,6 @@ public class BulletDestroy : MonoBehaviour, IFactoryObject
 
     public void DestroySelf()
     {
-        BulletPool.Instance.DestroyBullet(gameObject);
+        BulletPool.Instance.DestroyObj(gameObject);
     }
 }

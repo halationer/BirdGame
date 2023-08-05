@@ -14,6 +14,12 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (gameObject.tag == "enemy_bullet" && collision.tag == "player_bullet")
+        {
+            BulletPool.Instance.DestroyObj(collision.gameObject);
+            BulletPool.Instance.DestroyObj(gameObject);
+        }
+
         ILifeObject obj = collision.GetComponent<ILifeObject>();
 
         if (obj == null) return;
@@ -26,10 +32,11 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
             if (obj.isDie())
             {
                 collision.GetComponent<IFactoryObject>()?.DestroySelf();
-                ScoreManager.Instance.AddScore();
+                int score = collision.GetComponent<IScoreObject>().Score;
+                ScoreManager.Instance.AddScore(score);
             }
 
-            BulletPool.Instance.DestroyBullet(gameObject);
+            BulletPool.Instance.DestroyObj(gameObject);
         }
 
         if (gameObject.tag == "enemy_bullet" && collision.tag == "player")
@@ -41,11 +48,9 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
             if (obj.isDie())
             {
                 collision.GetComponent<BirdAttack>()?.Die();
-                BulletPool.Instance.DestroyBullet(gameObject);
             }
 
-            BulletPool.Instance.DestroyBullet(gameObject);
+            BulletPool.Instance.DestroyObj(gameObject);
         }
-
     }
 }

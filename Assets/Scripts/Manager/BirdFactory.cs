@@ -1,130 +1,116 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class BirdFactory : MonoBehaviour
+public class BirdFactory : FactoryBase
 {
-    public GameObject birdType;
-    public int initialBirdNum = 5;
-    public float gapX = 3.0f;
-    public float moveSpeed = -5.0f;
+    public List<List<float>> birdGenerateTable;
     public float existDistance = 10.0f;
-    public float rangeY = 5.0f;
-    public bool debugRange = false;
 
-    float ExistTime { get => Mathf.Abs(existDistance / moveSpeed); }
-    float GenerateTime { get => Mathf.Abs(gapX / moveSpeed); }
     Dictionary<GameObject, Coroutine> allBirdList = new();
-    Queue<GameObject> deactiveBird = new();
 
-    private void Start()
+    protected override void Start()
     {
-        InitBirds();
+        base.Start();
+
+        if (birdGenerateTable == null)
+        {
+            birdGenerateTable = new();
+
+            birdGenerateTable.Add(new()
+            {
+                0.5f,
+                0.5f,
+                1.0f,
+                0.5f,
+                0.5f,
+                2.0f,
+            });
+            birdGenerateTable.Add(new()
+            {
+                3.0f,
+                0.5f,
+                0.5f,
+                4.0f,
+                0.5f,
+                0.5f
+            });
+            birdGenerateTable.Add(new()
+            {
+                4.0f,
+                8.0f
+            });
+        }
 
         GameManager.Instance.OnGameStart += OnGameStart;
         GameManager.Instance.OnGameEnd += OnGameEnd;
-        GameManager.Instance.OnGameRestart += OnGameRestart;
     }
 
     void OnGameStart()
     {
-        StartCoroutine(GenerateBirdLoop());
-        //coroutineList.Add(StartCoroutine(GenerateBirdLoop()));
+        for (int typeIndex = 0; typeIndex < objList.Count; ++typeIndex)
+        {
+            StartCoroutine(GenerateBirdLoop(typeIndex));
+        }
     }
 
     void OnGameEnd()
     {
-        //foreach (Coroutine coroutine in coroutineList)
-        //    StopCoroutine(coroutine);
-        //coroutineList.Clear();
         StopAllCoroutines();
     }
 
-    void OnGameRestart()
+    protected override GameObject MakeNewObj(int typeIndex)
     {
-        foreach (var bird in allBirdList)
-        {
-            if (bird.Key.activeSelf)
-            {
-                DestroyBird(bird.Key);
-            }
-        }
-    }
-
-    void InitBirds()
-    {
-        for (int i = 0; i < initialBirdNum; ++i)
-        {
-            MakeNewBird();
-        }
-    }
-
-    void MakeNewBird()
-    {
-        GameObject newBird = Instantiate(birdType, transform);
-        newBird.SetActive(false);
+        GameObject newBird = base.MakeNewObj(typeIndex);
         newBird.GetComponent<AIBird>().factory = this;
-        deactiveBird.Enqueue(newBird);
         allBirdList.Add(newBird, null);
+        return newBird;
     }
 
-    GameObject ActiveBird()
+    public override void DestroyObj(GameObject obj)
     {
-        if (deactiveBird.Count == 0)
-        {
-            MakeNewBird();
-        }
-        GameObject bird = deactiveBird.Dequeue();
-        bird.GetComponent<AIBird>().moveSpeed = moveSpeed;
-        bird.transform.position = transform.position;
-        bird.SetActive(true);
-        return bird;
-    }
-
-    public void DestroyBird(GameObject bird)
-    {
-        bird.SetActive(false);
-        deactiveBird.Enqueue(bird);
-        var coroutine = allBirdList[bird];
+        base.DestroyObj(obj);
+        var coroutine = allBirdList[obj];
         if(coroutine != null)
         {
             StopCoroutine(coroutine);
         }
     }
 
-    void RandomY(GameObject bird)
+    GameObject ActiveBird(GameObject obj = null)
     {
-        bird.transform.position += Vector3.up * (debugRange ? rangeY : Random.Range(0, rangeY));
+        return ActiveObj(transform, obj);
+    }
+
+    public void DestroyBird(GameObject bird)
+    {
+        DestroyObj(bird);
     }
 
     IEnumerator DestroyBirdByTime(GameObject bird)
     {
-        yield return new WaitForSeconds(ExistTime);
+        float existTime = Mathf.Abs( existDistance / bird.GetComponent<AIBird>().moveSpeed);
+        yield return new WaitForSeconds(existTime);
         DestroyBird(bird);
     }
 
-    void GenerateBird()
+    IEnumerator GenerateBird(int typeIndex, float time)
     {
-        GameObject bird = ActiveBird();
-        RandomY(bird);
+        yield return new WaitForSeconds(time);
+        GameObject bird = ActiveBird(objList[typeIndex]);
         allBirdList[bird] = StartCoroutine(DestroyBirdByTime(bird));
     }
 
-    IEnumerator GenerateBirdLoop()
+    IEnumerator GenerateBirdLoop(int typeIndex)
     {
         yield return new WaitForSeconds(2.0f);
 
         while (true)
         {
-            GenerateBird();
-            yield return new WaitForSeconds(GenerateTime);
-
-            GenerateBird();
-            yield return new WaitForSeconds(GenerateTime * 0.5f);
-
-            GenerateBird();
-            yield return new WaitForSeconds(GenerateTime * 0.5f);
+            foreach (float time in birdGenerateTable[typeIndex])
+            {
+                yield return GenerateBird(typeIndex, time);
+            }
         }
     }
 }

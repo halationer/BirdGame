@@ -106,7 +106,7 @@ public class Player : MonoBehaviour, ILifeObject
         if (BulletPool.Instance == null) return;
 
         attackLock = true;
-        GameObject bullet = BulletPool.Instance.ActiveBullet(bulletStart, bulletType);
+        GameObject bullet = BulletPool.Instance.ActiveObj(bulletStart, bulletType);
         float sleepTime = 1.0f / attackSpeed;
         Invoke("ResetFire", sleepTime);
     }

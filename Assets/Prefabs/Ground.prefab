@@ -179,6 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7617233887378732869}
   - component: {fileID: 6395042105934013946}
+  - component: {fileID: 4539080602125809802}
   m_Layer: 0
   m_Name: Ground
   m_TagString: ground
@@ -235,7 +236,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.7}
+  m_Offset: {x: 4, y: -0.7}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -246,8 +247,24 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 22, y: 1}
+  m_Size: {x: 30, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4539080602125809802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6743461241101849933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ddf16ce1423f1418f5411efc249c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moving: 1
+  loop: 1
+  moveSpeed: -2
+  loopOffset: 6.86
 --- !u!1 &7658368908438204166
 GameObject:
   m_ObjectHideFlags: 0

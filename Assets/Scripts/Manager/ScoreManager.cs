@@ -39,9 +39,9 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
-    public void AddScore()
+    public void AddScore(int score = 1)
     {
-        Score++;
+        Score += score;
         BestScore = Mathf.Max(BestScore, Score);
     }
 }

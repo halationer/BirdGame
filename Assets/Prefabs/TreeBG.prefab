@@ -177,6 +177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8652462682763809779}
+  - component: {fileID: 2975495578321774205}
   m_Layer: 0
   m_Name: TreeBG
   m_TagString: Untagged
@@ -207,6 +208,22 @@ Transform:
   - {fileID: 2216977186378056792}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2975495578321774205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154346708295144928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2ddf16ce1423f1418f5411efc249c82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moving: 1
+  loop: 1
+  moveSpeed: -0.5
+  loopOffset: 7.08
 --- !u!1 &6711657038106637820
 GameObject:
   m_ObjectHideFlags: 0

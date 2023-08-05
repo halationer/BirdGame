@@ -3,12 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIBird : Player, IFactoryObject
+public enum AIType
 {
+    BirdCommon,
+    BirdSwing,
+    BirdNoAttack,
+}
+
+public class AIBird : Player, IFactoryObject, IScoreObject
+{
+    public AIType type = AIType.BirdCommon;
+
     [HideInInspector]
     public BirdFactory factory;
 
-    public int TypeIndex { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+    float swingTime = 0;
+    public float swingRange = 2.0f;
+    public float swingSpeed = 2.0f;
+
+    private int typeIndex; 
+    public int TypeIndex { get => typeIndex; set => typeIndex = value; }
+
+    [SerializeField]
+    private int score = 1;
+    public int Score { get => score; }
 
     private void OnEnable()
     {
@@ -29,6 +47,8 @@ public class AIBird : Player, IFactoryObject
             animator.enabled = true;
         }
 
+        swingTime = 0f;
+        originalPosition = transform.position;
         GetComponent<Collider2D>().enabled = true;
     }
 
@@ -36,8 +56,10 @@ public class AIBird : Player, IFactoryObject
     {
         base.OnGameEnd();
 
+        swingTime = 0f;
         GetComponent<Collider2D>().enabled = false;
     }
+    
 
     protected override void Move()
     {
@@ -49,11 +71,20 @@ public class AIBird : Player, IFactoryObject
         moveDistance *= moveSpeed;
         moveDistance *= Time.deltaTime;
         transform.position = transform.position + moveDistance;
+
+        if(type == AIType.BirdSwing)
+        {
+            swingTime += Time.deltaTime * swingSpeed;
+            Vector3 swingPos = transform.position;
+            swingPos.y = Mathf.Sin(swingTime) * swingRange + originalPosition.y;
+            transform.position = swingPos;
+        }
     }
 
     protected override void Attack()
     {
         if (attackLock) return;
+        if (type == AIType.BirdNoAttack) return;
         FireOnce();
     }
 
