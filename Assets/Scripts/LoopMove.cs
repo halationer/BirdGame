@@ -32,7 +32,8 @@ public class LoopMove : MonoBehaviour
 
     public void Move()
     {
-        transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
+        // 在局部坐标系下向前移动
+        transform.Translate(moveSpeed * Time.deltaTime, 0, 0, Space.Self);
         if (!loop) return;
         
         float currentOffset = (transform.position - originalPosition).magnitude;

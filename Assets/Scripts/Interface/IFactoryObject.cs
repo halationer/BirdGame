@@ -1,7 +1,5 @@
 
-public interface IFactoryObject
+public interface IFactoryObject: IDestroySelf
 {
-    void DestroySelf();
-
     int TypeIndex { get; set; }
 }

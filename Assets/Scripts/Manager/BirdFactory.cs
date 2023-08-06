@@ -7,6 +7,9 @@ public class BirdFactory : FactoryBase
     public List<List<float>> birdGenerateTable;
     public float existDistance = 10.0f;
 
+    public GameObject bossObject;
+    public float bossAppearTime = 60.0f;
+
     Dictionary<GameObject, Coroutine> allBirdList = new();
 
     protected override void Start()
@@ -48,10 +51,13 @@ public class BirdFactory : FactoryBase
 
     void OnGameStart()
     {
+        List<Coroutine> list = new List<Coroutine>();
         for (int typeIndex = 0; typeIndex < objList.Count; ++typeIndex)
         {
-            StartCoroutine(GenerateBirdLoop(typeIndex));
+            list.Add(StartCoroutine(GenerateBirdLoop(typeIndex)));
         }
+
+        StartCoroutine(GenerateBoss(list, bossAppearTime));
     }
 
     void OnGameEnd()
@@ -111,6 +117,21 @@ public class BirdFactory : FactoryBase
             {
                 yield return GenerateBird(typeIndex, time);
             }
+        }
+    }
+
+    IEnumerator GenerateBoss(List<Coroutine> coroutines, float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        foreach(Coroutine coroutine in coroutines)
+        {
+            StopCoroutine(coroutine);
+        }
+
+        if (bossObject != null)
+        {
+            bossObject.GetComponent<AIBoss>()?.GenerateBoss();
         }
     }
 }

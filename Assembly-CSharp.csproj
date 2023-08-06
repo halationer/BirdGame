@@ -87,6 +87,8 @@
     <Compile Include="Assets\Scripts\Player\BirdPlayer.cs" />
     <Compile Include="Assets\Scripts\Player\BirdAttack.cs" />
     <Compile Include="Assets\Scripts\Interface\IDamageMaker.cs" />
+    <Compile Include="Assets\Scripts\ShootBattery.cs" />
+    <Compile Include="Assets\Scripts\Interface\IDestroySelf.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

@@ -595,21 +595,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 302365513676014705, guid: c511c5e6ff163294eb12495c30881319, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 6b5a28767bbac5b49aead6a0cc9433c8, type: 2}
     - target: {fileID: 1256283296851570598, guid: c511c5e6ff163294eb12495c30881319, type: 3}
       propertyPath: m_Name
       value: Boss
       objectReference: {fileID: 0}
-    - target: {fileID: 1340129016764183225, guid: c511c5e6ff163294eb12495c30881319, type: 3}
-      propertyPath: m_Constraints
-      value: 7
-      objectReference: {fileID: 0}
+    - target: {fileID: 1630296219423676202, guid: c511c5e6ff163294eb12495c30881319, type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 2001695303}
     - target: {fileID: 4559041239679077404, guid: c511c5e6ff163294eb12495c30881319, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.15
       objectReference: {fileID: 0}
     - target: {fileID: 4559041239679077404, guid: c511c5e6ff163294eb12495c30881319, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5654922
+      value: 1.13
       objectReference: {fileID: 0}
     - target: {fileID: 4559041239679077404, guid: c511c5e6ff163294eb12495c30881319, type: 3}
       propertyPath: m_LocalPosition.z
@@ -884,6 +888,8 @@ MonoBehaviour:
   - {fileID: 8390824336573811321, guid: 7e0051a89f852a0468a568c9710bb435, type: 3}
   - {fileID: 8390824336573811321, guid: f1d17c907ed827c44b6dca9ca5a3c5df, type: 3}
   - {fileID: 4843046042778169134, guid: 0642dee00354d5149a2c4f6bcd3321fb, type: 3}
+  - {fileID: 7221667985487025794, guid: ff5fb82e1d6b63c4189d8deeff4888bf, type: 3}
+  - {fileID: 8390824336573811321, guid: 98fdc4c9453fa4940b4e5fda7df035d1, type: 3}
   initialPoolSize: 1
   rangeY: 0.1
   debugRange: 0
@@ -2306,7 +2312,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2040577926
 Transform:
   m_ObjectHideFlags: 0

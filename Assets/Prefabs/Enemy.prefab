@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8063242134917263990}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: -2.43, y: -0.85, z: 0}
   m_LocalScale: {x: 1, y: 0.34, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8116175214719380845}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
 --- !u!212 &1200126856679728053
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -200,7 +200,11 @@ MonoBehaviour:
   bulletStart: {fileID: 1962076201739783687}
   bulletSpeed: -6
   bulletType: {fileID: 8390824336573811321, guid: f1d17c907ed827c44b6dca9ca5a3c5df, type: 3}
+  type: 0
   factory: {fileID: 0}
+  swingRange: 2
+  swingSpeed: 2
+  score: 1
 --- !u!1001 &7701718216457421047
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -31,9 +31,9 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
 
             if (obj.isDie())
             {
-                collision.GetComponent<IFactoryObject>()?.DestroySelf();
                 int score = collision.GetComponent<IScoreObject>().Score;
                 ScoreManager.Instance.AddScore(score);
+                collision.GetComponent<IDestroySelf>()?.DestroySelf();
             }
 
             BulletPool.Instance.DestroyObj(gameObject);
