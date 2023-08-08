@@ -16,8 +16,8 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
     {
         if (gameObject.tag == "enemy_bullet" && collision.tag == "player_bullet")
         {
-            BulletPool.Instance.DestroyObj(collision.gameObject);
-            BulletPool.Instance.DestroyObj(gameObject);
+            collision.GetComponent<IDestroySelf>()?.DestroySelf();
+            gameObject.GetComponent<IDestroySelf>()?.DestroySelf();
         }
 
         ILifeObject obj = collision.GetComponent<ILifeObject>();
@@ -36,7 +36,7 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
                 collision.GetComponent<IDestroySelf>()?.DestroySelf();
             }
 
-            BulletPool.Instance.DestroyObj(gameObject);
+            gameObject.GetComponent<IDestroySelf>()?.DestroySelf();
         }
 
         if (gameObject.tag == "enemy_bullet" && collision.tag == "player")
@@ -50,7 +50,7 @@ public class BulletTrigger : MonoBehaviour, IDamageMaker
                 collision.GetComponent<BirdAttack>()?.Die();
             }
 
-            BulletPool.Instance.DestroyObj(gameObject);
+            gameObject.GetComponent<IDestroySelf>()?.DestroySelf();
         }
     }
 }

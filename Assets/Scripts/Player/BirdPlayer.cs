@@ -63,7 +63,7 @@ public class BirdPlayer : MonoBehaviour
 
     void CollisionDie()
     {
-        GameManager.Instance.EndGame();
+        GameManager.Instance.LoseGame();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

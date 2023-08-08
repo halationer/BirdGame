@@ -5063,7 +5063,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.06}
-  m_Size: {x: 0.35, y: 0.78}
+  m_Size: {x: 0.68, y: 1.11}
   m_Direction: 0
 --- !u!114 &4810614104271458290
 MonoBehaviour:
@@ -5094,6 +5094,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   existTime: 10
   typeIndex: 0
+  flicker: {fileID: 7918366851979527379, guid: 70e0643c50cbebf40b9420f48dafe300, type: 3}
 --- !u!114 &-7905631600933724604
 MonoBehaviour:
   m_ObjectHideFlags: 0

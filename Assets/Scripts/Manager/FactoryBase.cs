@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FactoryBase : MonoBehaviour
+public class FactoryBase<T> : MonoSingleton<T> where T : MonoBehaviour
 {
     public List<GameObject> objList;
     public int initialPoolSize = 5;
@@ -38,7 +38,9 @@ public class FactoryBase : MonoBehaviour
 
         if (obj != null)
         {
-            typeIndex = obj.GetComponent<IFactoryObject>().TypeIndex;
+            IFactoryObject factoryObject = obj.GetComponent<IFactoryObject>();
+            if (factoryObject == null) return; 
+            typeIndex = factoryObject.TypeIndex;
         }
 
         // ∑¿÷π÷ÿ∏¥»Î∂”

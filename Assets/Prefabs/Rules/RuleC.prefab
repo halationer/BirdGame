@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &435148721491431950
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2318285468014787124}
+  - component: {fileID: -7774870212393082948}
+  - component: {fileID: -5966519987571519978}
+  m_Layer: 0
+  m_Name: RuleC
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2318285468014787124
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435148721491431950}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.4915423, y: 1.5843234, z: 0.027323326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7774870212393082948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435148721491431950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 265f2a31e8986e747bd7500cf40ee67a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startTime: 5
+  enemyType: {fileID: 8371659087134552419, guid: 7157d11ca3ca0374dab9a0657f5760e7, type: 3}
+  maxHp: 1
+  bulletType: {fileID: 8390824336573811321, guid: f1d17c907ed827c44b6dca9ca5a3c5df, type: 3}
+  spawnBatch: 1
+  enemyPerBatch: 1
+  timeSpace: 3
+  spawnTime: -1
+  itemRule: {fileID: -5966519987571519978}
+--- !u!114 &-5966519987571519978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435148721491431950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b865cb0543d9fc4f98f88a1730a7e7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemType: {fileID: 1654842129336313556, guid: d640d2ac105142545873881ff261bb75, type: 3}
+  dropRate: 1

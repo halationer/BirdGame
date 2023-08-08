@@ -1,16 +1,30 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BirdAttack : Player
 {
+    public int maxLife = 4;
+    public int life { get; private set;}
+
     protected override void OnGameEnd()
     {
         base.OnGameEnd();
 
-        rigid.gravityScale = 1.0f;
-        rigid.velocity = Vector3.zero;
-        rigid.AddForce(Vector2.down * 5.0f, ForceMode2D.Impulse);
+        if (!GameManager.Win)
+        {
+            rigid.gravityScale = 1.0f;
+            rigid.velocity = Vector3.zero;
+            rigid.AddForce(Vector2.down * 5.0f, ForceMode2D.Impulse);
+        }
+    }
+
+    protected override void OnGameStart()
+    {
+        base.OnGameStart();
+
+        life = maxLife;
     }
 
     protected override void Move()
@@ -37,7 +51,17 @@ public class BirdAttack : Player
 
     public void Die()
     {
-        GameManager.Instance.EndGame();
+        if(--life <= 0)
+        {
+            GameManager.Instance.LoseGame();
+        }
+        else
+        {
+            base.OnGameEnd();
+            base.OnGameRestart();
+            base.OnGameStart();
+            LockHp(2.0f);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -47,7 +71,12 @@ public class BirdAttack : Player
         switch (collision.collider.tag) 
         {
             case "enemy":
-                Die(); break;
+                TakeDamage(maxHp);
+                if(isDie())
+                {
+                    Die();
+                }
+                break;
         }
     }
 }

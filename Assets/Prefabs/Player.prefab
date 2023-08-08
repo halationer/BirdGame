@@ -200,6 +200,7 @@ MonoBehaviour:
   bulletStart: {fileID: 1962076201739783687}
   bulletSpeed: 10
   bulletType: {fileID: 8390824336573811321, guid: 7e0051a89f852a0468a568c9710bb435, type: 3}
+  maxLife: 4
 --- !u!1001 &7701718216457421047
 PrefabInstance:
   m_ObjectHideFlags: 0

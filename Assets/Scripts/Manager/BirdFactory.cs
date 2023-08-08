@@ -2,62 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BirdFactory : FactoryBase
+public class BirdFactory : FactoryBase<BirdFactory>
 {
-    public List<List<float>> birdGenerateTable;
     public float existDistance = 10.0f;
 
-    public GameObject bossObject;
-    public float bossAppearTime = 60.0f;
+    public AIBoss bossType;
+    public HPBar bossBar;
+    public Transform bossStayPos;
 
+    AIBoss bossInstance;
     Dictionary<GameObject, Coroutine> allBirdList = new();
 
     protected override void Start()
     {
         base.Start();
 
-        if (birdGenerateTable == null)
-        {
-            birdGenerateTable = new();
-
-            birdGenerateTable.Add(new()
-            {
-                0.5f,
-                0.5f,
-                1.0f,
-                0.5f,
-                0.5f,
-                2.0f,
-            });
-            birdGenerateTable.Add(new()
-            {
-                3.0f,
-                0.5f,
-                0.5f,
-                4.0f,
-                0.5f,
-                0.5f
-            });
-            birdGenerateTable.Add(new()
-            {
-                4.0f,
-                8.0f
-            });
-        }
-
-        GameManager.Instance.OnGameStart += OnGameStart;
         GameManager.Instance.OnGameEnd += OnGameEnd;
-    }
-
-    void OnGameStart()
-    {
-        List<Coroutine> list = new List<Coroutine>();
-        for (int typeIndex = 0; typeIndex < objList.Count; ++typeIndex)
-        {
-            list.Add(StartCoroutine(GenerateBirdLoop(typeIndex)));
-        }
-
-        StartCoroutine(GenerateBoss(list, bossAppearTime));
     }
 
     void OnGameEnd()
@@ -76,62 +36,50 @@ public class BirdFactory : FactoryBase
     public override void DestroyObj(GameObject obj)
     {
         base.DestroyObj(obj);
-        var coroutine = allBirdList[obj];
-        if(coroutine != null)
+        if(allBirdList.ContainsKey(obj))
         {
-            StopCoroutine(coroutine);
+            var coroutine = allBirdList[obj];
+            if(coroutine != null) StopCoroutine(coroutine);
         }
-    }
-
-    GameObject ActiveBird(GameObject obj = null)
-    {
-        return ActiveObj(transform, obj);
-    }
-
-    public void DestroyBird(GameObject bird)
-    {
-        DestroyObj(bird);
     }
 
     IEnumerator DestroyBirdByTime(GameObject bird)
     {
         float existTime = Mathf.Abs( existDistance / bird.GetComponent<AIBird>().moveSpeed);
         yield return new WaitForSeconds(existTime);
-        DestroyBird(bird);
+        DestroyObj(bird);
     }
 
-    IEnumerator GenerateBird(int typeIndex, float time)
+    public GameObject GenerateBird(GameObject birdType)
     {
-        yield return new WaitForSeconds(time);
-        GameObject bird = ActiveBird(objList[typeIndex]);
+        if(objList.IndexOf(birdType) == -1)
+        {
+            Debug.LogWarning("Bird type doesn't exist in factory!");
+            return null;
+        }
+        GameObject bird = ActiveObj(transform, birdType);
         allBirdList[bird] = StartCoroutine(DestroyBirdByTime(bird));
+        return bird;
     }
 
-    IEnumerator GenerateBirdLoop(int typeIndex)
+    public AIBoss GenerateBoss()
     {
-        yield return new WaitForSeconds(2.0f);
-
-        while (true)
+        if (bossInstance == null)
         {
-            foreach (float time in birdGenerateTable[typeIndex])
+            bossInstance = Instantiate(bossType);
+            bossInstance.bossStayPos = bossStayPos;
+            bossInstance.RunBoss();
+
+            bossBar.obj = bossInstance.gameObject;
+            bossBar.gameObject.SetActive(true);
+
+            bossInstance.onDie += delegate ()
             {
-                yield return GenerateBird(typeIndex, time);
-            }
+                bossBar.obj = null;
+                bossBar.gameObject.SetActive(false);
+                bossInstance = null;
+            };
         }
-    }
-
-    IEnumerator GenerateBoss(List<Coroutine> coroutines, float time)
-    {
-        yield return new WaitForSeconds(time);
-
-        foreach(Coroutine coroutine in coroutines)
-        {
-            StopCoroutine(coroutine);
-        }
-
-        if (bossObject != null)
-        {
-            bossObject.GetComponent<AIBoss>()?.GenerateBoss();
-        }
+        return bossInstance;
     }
 }

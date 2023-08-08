@@ -9,6 +9,8 @@ public class BulletDestroy : MonoBehaviour, IFactoryObject
     [HideInInspector]
     public int typeIndex = 0;
 
+    public GameObject flicker;
+
     public int TypeIndex { get => typeIndex; set => typeIndex = value; }
 
     void Start()
@@ -35,5 +37,16 @@ public class BulletDestroy : MonoBehaviour, IFactoryObject
     public void DestroySelf()
     {
         BulletPool.Instance.DestroyObj(gameObject);
+        if(flicker != null)
+        {
+            GameObject flickerInstance = Instantiate(flicker);
+            flickerInstance.transform.SetPositionAndRotation(transform.position, transform.rotation);
+            Destroy(flickerInstance, 2.0f);
+        }
+    }
+
+    public void DestroySelf_AnimEvent()
+    {
+        throw new System.NotImplementedException();
     }
 }

@@ -9,10 +9,18 @@ public enum GameState
     Playing,
     End
 }
+public enum GameResult
+{
+    Win,
+    Lose,
+}
 
 public class GameManager : MonoBehaviour
 {
     public GameState state { get; private set; }
+    public GameResult result { get; private set; }
+
+    public static bool Win { get => Instance.result == GameResult.Win; }
 
     public static GameManager Instance { get; private set; }
 
@@ -39,11 +47,22 @@ public class GameManager : MonoBehaviour
         OnGameStart?.Invoke();
     }
 
-    public void EndGame()
+    public void WinGame()
+    {
+        EndGame(GameResult.Win);
+    }
+
+    public void LoseGame()
+    {
+        EndGame();
+    }
+
+    private void EndGame(GameResult result = GameResult.Lose)
     {
         if(state != GameState.Playing) return;
 
         state = GameState.End;
+        this.result = result; 
         OnGameEnd?.Invoke();
     }
 
@@ -55,15 +74,27 @@ public class GameManager : MonoBehaviour
         OnGameRestart?.Invoke();
     }
 
-    [MenuItem("Game/Restart", false, 1000)]
-    public static void MenuRestart()
+    [MenuItem("Game/End", false, 1000)]
+    public static void MenuEnd()
     {
-        Instance.RestartGame();
+        Instance.WinGame();
     }
 
-    [MenuItem("Game/Restart", true, 1000)]
-    public static bool VarifyRestart()
+    [MenuItem("Game/End", true, 1000)]
+    public static bool VarifyEnd()
     {
-        return Instance != null;
+        return Instance != null && Instance.state == GameState.Playing;
     }
+
+    //[MenuItem("Game/Restart", false, 1001)]
+    //public static void MenuRestart()
+    //{
+    //    Instance.RestartGame();
+    //}
+
+    //[MenuItem("Game/Restart", true, 1001)]
+    //public static bool VarifyRestart()
+    //{
+    //    return Instance != null && Instance.state == GameState.End;
+    //}
 }

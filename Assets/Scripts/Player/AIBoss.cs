@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,25 +6,39 @@ using UnityEngine;
 public class AIBoss : Player, IDestroySelf, IScoreObject
 {
     public Animator missileAnim;
+    public ShootMissile missile;
     public Animator batteryAnim;
-    public Transform target;
     public float comingTime = -1f;
     public List<Transform> bulletSocketList;
+
+    [HideInInspector]
+    public Transform bossStayPos;
 
     [SerializeField]
     private int score = 888;
     public int Score => score;
 
+    Transform target;
     bool batteryOn = false;
     ShootBattery batteryComponent;
+
+    public event Action onDie;
 
     protected override void Start()
     {
         base.Start();
 
-        gameObject.SetActive(false);
         batteryComponent = GetComponentInChildren<ShootBattery>();
         batteryComponent.onBatteryReady += delegate () { batteryOn = true; };
+
+        target = FindAnyObjectByType<BirdAttack>().transform;
+        missile.target = target;
+        LockHp(2.0f);
+    }
+
+    private void OnEnable()
+    {
+        OnGameStart();
     }
 
     protected override void OnGameStart()
@@ -32,23 +47,19 @@ public class AIBoss : Player, IDestroySelf, IScoreObject
 
         if(comingTime > 0)
         {
-            GenerateBoss();
+            RunBoss();
         }
     }
 
-    public void GenerateBoss()
+    public void RunBoss()
     {
         // put boss outof screen and active
         transform.position = Camera.main.ViewportToWorldPoint(new Vector3(1.5f, 0.5f));
-        gameObject.SetActive(true);
-
         StartCoroutine(BossPlay());
     }
 
-    protected override void OnGameEnd()
+    void BossStop()
     {
-        base.OnGameEnd();
-
         if (batteryOn)
         {
             batteryOn = false;
@@ -57,11 +68,18 @@ public class AIBoss : Player, IDestroySelf, IScoreObject
         StopAllCoroutines();
     }
 
+    protected override void OnGameEnd()
+    {
+        base.OnGameEnd();
+
+        BossStop();
+    }
+
     protected override void OnGameRestart()
     {
         base.OnGameRestart();
 
-        gameObject.SetActive(false);
+        DestroySelf();
     }
 
     protected override void Update()
@@ -80,16 +98,19 @@ public class AIBoss : Player, IDestroySelf, IScoreObject
         yield return new WaitForSeconds(comingTime);
 
         // move to the original position
-        yield return MoveTo(originalPosition);
+        yield return MoveTo(bossStayPos.position);
 
         while(true)
         {
             yield return new WaitForSeconds(0.5f);
 
+            bulletSocketList[0].parent.Rotate(0, 0, 10, Space.Self);
             yield return ShootByList(2);
             yield return new WaitForSeconds(0.5f);
+            bulletSocketList[0].parent.Rotate(0, 0, -5, Space.Self);
             yield return ShootByList(3);
             yield return new WaitForSeconds(0.6f);
+            bulletSocketList[0].parent.Rotate(0, 0, -5, Space.Self);
             yield return ShootByList(4);
             yield return new WaitForSeconds(0.7f);
             missileAnim.SetTrigger("Shoot");
@@ -99,7 +120,7 @@ public class AIBoss : Player, IDestroySelf, IScoreObject
            
             yield return WaitForBatteryReady();
 
-            yield return BatteryShoot(Random.Range(20, 30));
+            yield return BatteryShoot(UnityEngine.Random.Range(20, 30));
 
             batteryOn = false;
             batteryAnim.SetTrigger("Back");
@@ -155,7 +176,15 @@ public class AIBoss : Player, IDestroySelf, IScoreObject
 
     public void DestroySelf()
     {
-        gameObject.SetActive(false);
-        GameManager.Instance.EndGame();
+        animator.SetTrigger("Die");
+
+        BossStop();
+    }
+
+
+    public void DestroySelf_AnimEvent()
+    {
+        onDie?.Invoke();
+        Destroy(gameObject);
     }
 }

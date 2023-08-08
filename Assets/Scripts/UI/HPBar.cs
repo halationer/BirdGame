@@ -14,10 +14,13 @@ public class HPBar : MonoBehaviour
     private void Start()
     {
         slider = GetComponent<Slider>();
+        if ( obj == null ) gameObject.SetActive(false);
     }
 
     private void Update()
     {
+        if (obj == null) return;
+
         ILifeObject lifeObject = obj.GetComponent<ILifeObject>();
         targetValue = lifeObject.GetHP() / (float)lifeObject.GetMaxHP();
         slider.value = Mathf.Lerp(slider.value, targetValue, changeSpeed);

@@ -456,8 +456,8 @@ MonoBehaviour:
   bulletSpeed: 10
   bulletType: {fileID: 8390824336573811321, guid: 98fdc4c9453fa4940b4e5fda7df035d1, type: 3}
   missileAnim: {fileID: 8887242343981867937}
+  missile: {fileID: 8626301918339026896}
   batteryAnim: {fileID: 7155954447236436871}
-  target: {fileID: 0}
   comingTime: -1
   bulletSocketList:
   - {fileID: 4747134911768920451}
@@ -469,8 +469,8 @@ MonoBehaviour:
   - {fileID: 6038802546453982520}
   - {fileID: 6952103407759563799}
   - {fileID: 8706634203684323924}
+  bossStayPos: {fileID: 0}
   score: 888
-  factory: {fileID: 0}
 --- !u!1 &1753637768028332528
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,6 +774,7 @@ GameObject:
   - component: {fileID: 3555071363651509417}
   - component: {fileID: 6120206727032114834}
   - component: {fileID: 302365513676014705}
+  - component: {fileID: 688658611323622978}
   m_Layer: 0
   m_Name: bird1
   m_TagString: Untagged
@@ -860,7 +861,7 @@ Animator:
   m_GameObject: {fileID: 4325097995233036198}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0b2306f289af10849b89360fdf272006, type: 2}
+  m_Controller: {fileID: 9100000, guid: 6b5a28767bbac5b49aead6a0cc9433c8, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -871,6 +872,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &688658611323622978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4325097995233036198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481481a0cce3706499977300801e4a8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5952516282613616748
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1438,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6344558880837308302, guid: 1620e17823240d04bb72fb4603d74b27, type: 3}
   m_PrefabInstance: {fileID: 7620983425224417204}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8626301918339026896 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2194919808707481700, guid: 1620e17823240d04bb72fb4603d74b27, type: 3}
+  m_PrefabInstance: {fileID: 7620983425224417204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffa17e08c1b19c44da3f2d019e14272e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8887242343981867937 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 1339539274218699797, guid: 1620e17823240d04bb72fb4603d74b27, type: 3}

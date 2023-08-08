@@ -7,7 +7,7 @@ public enum AIType
 {
     BirdCommon,
     BirdSwing,
-    BirdNoAttack,
+    BirdQuick,
 }
 
 public class AIBird : Player, IFactoryObject, IScoreObject
@@ -16,6 +16,8 @@ public class AIBird : Player, IFactoryObject, IScoreObject
 
     [HideInInspector]
     public BirdFactory factory;
+    [HideInInspector]
+    public Item dropItem;
 
     float swingTime = 0;
     public float swingRange = 2.0f;
@@ -23,6 +25,7 @@ public class AIBird : Player, IFactoryObject, IScoreObject
 
     private int typeIndex; 
     public int TypeIndex { get => typeIndex; set => typeIndex = value; }
+
 
     [SerializeField]
     private int score = 1;
@@ -60,7 +63,6 @@ public class AIBird : Player, IFactoryObject, IScoreObject
         GetComponent<Collider2D>().enabled = false;
     }
     
-
     protected override void Move()
     {
         if (moveLock) return;
@@ -84,12 +86,24 @@ public class AIBird : Player, IFactoryObject, IScoreObject
     protected override void Attack()
     {
         if (attackLock) return;
-        if (type == AIType.BirdNoAttack) return;
+        if (type == AIType.BirdQuick) return;
         FireOnce();
     }
 
     public void DestroySelf()
     {
-        factory?.DestroyBird(gameObject);
+        animator.SetTrigger("Die");
+    }
+
+    public void DestroySelf_AnimEvent()
+    {
+        if(dropItem != null)
+        {
+            Item item = Instantiate(dropItem);
+            item.transform.position = transform.position;
+            dropItem = null;
+        }
+
+        factory?.DestroyObj(gameObject);
     }
 }

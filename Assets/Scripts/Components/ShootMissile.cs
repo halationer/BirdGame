@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class ShootMissile : MonoBehaviour
 {
-    public Transform target;
     public Transform missileSocket;
     public GameObject missileType;
+
+    [HideInInspector]
+    public Transform target;
 
     public void ShootOneMissile()
     {

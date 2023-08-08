@@ -18,6 +18,10 @@ public class Player : MonoBehaviour, ILifeObject
     protected Vector3 originalPosition;
     protected bool attackLock = true;
     protected bool moveLock = true;
+    protected bool dieLock = false;
+
+    protected bool hpLock = false;
+    public bool HpLocked => hpLock;
 
     protected virtual void Start()
     {
@@ -32,12 +36,19 @@ public class Player : MonoBehaviour, ILifeObject
         GameManager.Instance.OnGameEnd += OnGameEnd;
         GameManager.Instance.OnGameRestart += OnGameRestart;
     }
+    protected virtual void OnDestroy()
+    {
+        GameManager.Instance.OnGameStart -= OnGameStart;
+        GameManager.Instance.OnGameEnd -= OnGameEnd;
+        GameManager.Instance.OnGameRestart -= OnGameRestart;
+    }
 
     protected virtual void OnGameStart()
     {
         hp = maxHp;
         attackLock = false;
         moveLock = false;
+        dieLock = false;
     }
 
     protected virtual void OnGameEnd()
@@ -48,6 +59,7 @@ public class Player : MonoBehaviour, ILifeObject
         }
         attackLock = true;
         moveLock = true;
+        dieLock = true;
         CancelInvoke();
     }
 
@@ -57,6 +69,7 @@ public class Player : MonoBehaviour, ILifeObject
         animator.SetTrigger("Reset");
         attackLock = true;
         moveLock = true;
+        dieLock = true;
         transform.position = originalPosition;
         rigid.gravityScale = 0f;
     }
@@ -111,6 +124,20 @@ public class Player : MonoBehaviour, ILifeObject
         Invoke("ResetFire", sleepTime);
     }
 
+    protected void LockHp(float time)
+    {
+        hpLock = true;
+        animator.SetBool("HpLocked", HpLocked);
+        StartCoroutine(UnlockHp(time));
+    }
+
+    IEnumerator UnlockHp(float time)
+    {
+        yield return new WaitForSeconds(time);
+        hpLock = false;
+        animator.SetBool("HpLocked", HpLocked);
+    }
+
     void ResetFire()
     {
         attackLock = false;
@@ -128,12 +155,17 @@ public class Player : MonoBehaviour, ILifeObject
 
     public void TakeDamage(int damage)
     {
+        if (HpLocked) return;
+
         hp -= damage;
         if (hp < 0) hp = 0;
+        if (hp > maxHp) hp = maxHp;
     }
 
     public bool isDie()
     {
-        return hp == 0;
+        if (dieLock) return false;
+        dieLock = hp == 0;
+        return dieLock;
     }
 }
